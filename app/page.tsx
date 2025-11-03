@@ -4,18 +4,6 @@ import Link from 'next/link';
 import styles from '@/app/ui/home.module.css';
 import { lusitana } from '@/app/ui/fonts';
 import Image from 'next/image';
-import { neon } from '@neondatabase/serverless'; // Keep this import here for the server action
-
-// Server Action definition
-async function create(formData: FormData) {
-  'use server';
-  // Connect to the Neon database
-  const sql = neon(`${process.env.DATABASE_URL}`);
-  const comment = formData.get('comment');
-  // Insert the comment from the form into the Postgres database
-    await sql.query('INSERT INTO comments (comment) VALUES ($1)', [comment]);
-}
-
 export default function Page() {
   return (
     <main className="flex min-h-screen flex-col p-6">
@@ -37,13 +25,6 @@ export default function Page() {
           >
             <span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
           </Link>
-
-          {/* Form for submitting comments */}
-          <form action={create}>
-            <input type="text" placeholder="write a comment" name="comment" />
-            <button type="submit">Submit</button>
-          </form>
-
         </div>
         <div className="flex items-center justify-center p-6 md:w-3/5 md:px-28 md:py-12">
           {/* Add Hero Images Here */}
