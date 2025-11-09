@@ -6,7 +6,8 @@ import { LatestInvoice } from '@/app/lib/definitions';
 import { fetchLatestInvoices } from '@/app/lib/data';
 
 export default async function LatestInvoices() {
-  const latestInvoices = await fetchLatestInvoices();
+   // Prevent database calls during build time
+  if (process.env.NODE_ENV === 'production' && !process.env.POSTGRES_URL) {
   return (
     <div className="flex w-full flex-col md:col-span-4">
       <h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
@@ -60,4 +61,6 @@ export default async function LatestInvoices() {
       </div>
     </div>
   );
+}
+  const latestInvoices = await fetchLatestInvoices();
 }

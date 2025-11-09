@@ -15,12 +15,9 @@ const iconMap = {
 };
 
 export default async function CardWrapper() {
-    const {
-    numberOfInvoices,
-    numberOfCustomers,
-    totalPaidInvoices,
-    totalPendingInvoices,
-  } = await fetchCardData();
+
+  if (process.env.NODE_ENV === 'production' && !process.env.POSTGRES_URL) {
+
   return (
     <>
       {/* NOTE: Uncomment this code in Chapter 9 */}
@@ -35,6 +32,14 @@ export default async function CardWrapper() {
       />
     </>
   );
+}
+    const {
+    numberOfInvoices,
+    numberOfCustomers,
+    totalPaidInvoices,
+    totalPendingInvoices,
+  } = await fetchCardData();
+
 }
 
 export function Card({
