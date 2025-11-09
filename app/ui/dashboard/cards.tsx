@@ -15,13 +15,27 @@ const iconMap = {
 };
 
 export default async function CardWrapper() {
-
+  // Prevent database calls during build time
   if (process.env.NODE_ENV === 'production' && !process.env.POSTGRES_URL) {
+    return (
+      <>
+        <Card title="Collected" value="$0.00" type="collected" />
+        <Card title="Pending" value="$0.00" type="pending" />
+        <Card title="Total Invoices" value="0" type="invoices" />
+        <Card title="Total Customers" value="0" type="customers" />
+      </>
+    );
+  }
+
+  const {
+    numberOfInvoices,
+    numberOfCustomers,
+    totalPaidInvoices,
+    totalPendingInvoices,
+  } = await fetchCardData();
 
   return (
     <>
-      {/* NOTE: Uncomment this code in Chapter 9 */}
-
       <Card title="Collected" value={totalPaidInvoices} type="collected" />
       <Card title="Pending" value={totalPendingInvoices} type="pending" />
       <Card title="Total Invoices" value={numberOfInvoices} type="invoices" />
@@ -33,15 +47,6 @@ export default async function CardWrapper() {
     </>
   );
 }
-    const {
-    numberOfInvoices,
-    numberOfCustomers,
-    totalPaidInvoices,
-    totalPendingInvoices,
-  } = await fetchCardData();
-
-}
-
 export function Card({
   title,
   value,
